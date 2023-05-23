@@ -68,37 +68,51 @@ OFFLINE;
  - Execute a instância.
 ### Criando e anexando IP elástico
  - Na lateral esquerda, clique em IPs elásticos.
- - Clique em "Alocar endereço IP elástico.
- - Selecione o ip alocado e clique em "Ações" e depois em "Associar endereço IP elástico".
+ - Clique em "Alocar endereço IP elástico".
+ - Configure como quiser ou, neste caso, deixe as opções padrão e clique em "alocar".
+ - Selecione o IP Elástico criado e clique em "Ações" e depois em "Associar endereço IP elástico".
  - Selecione a instância EC2 criada anteriormente e clicar em "Associar".
-### Configurando gateway de internet
+### Criando gateway de internet
  - Em serviços, na parte superior, pesquise por VPC e clique, depois vá em "Gateways da internet" no menu lateral esquerdo.
  - Clique em "Criar gateway da internet".
  - Defina um nome para o gateway e clicar em "Criar gateway de internet".
- - Selecione o gateway criado e clique em "Ações" > "Associar à VPC".
- - Selecione a VPC da instância EC2 criada anteriormente e clique em "Associar".
-### Configurando rotas de internet
- - Na parte lateral esquerda, vá em Tabelas de rotas.
+### Associando gateway de internet
+ - No painel de "gateway de internet", selecione o gateway criado e clique em "Ações" > "Associar à VPC".
+ - Selecione a vpc Default e finalize.
+ 
+ ### Configurando rotas de internet
+ - Continuando no serviço VPC, na lateral esquerda, vá em "Tabelas de rotas".
  - Selecione a tabela de rotas da VPC.
  - Clique em "Ações" e selecione "Editar rotas".
  - Clique em "Adicionar rota".
  - Configurar da seguinte forma:
     - Destino - 0.0.0.0/0
-    - Alvo - Selecione o gateway de internet criado.
+    - Alvo - Selecione o gateway de internet e depois o mesmo que foi criado.
   - Clique em "Salvar alterações".
+
 ### Configurando grupo e regras de segurança
  - Acesse novamente o serviço EC2.
- - No menu lateral esquerdo, clique "Grupos de segurança".
+ - No menu lateral esquerdo, clique em "Grupos de segurança".
  - Selecione o grupo de segurança da instância EC2 criada.
- - Clique em "Editar regras de entrada".
+ - Vá em "Ações" > "Editar regras de entrada".
  - Configure as regras da seguinte forma: 
  
-     Tipo | Protocolo | Intervalo de portas | Origem | Descrição
-    ---|---|---|---|---
+     Tipo | Protocolo | Intervalo de portas | Origem  
+    ---|---|---|---
     SSH | TCP | 22 | 0.0.0.0/0 | SSH
-    TCP personalizado | TCP | 80 | 0.0.0.0/0 | HTTP
-    TCP personalizado | TCP | 443 | 0.0.0.0/0 | HTTPS
-    TCP personalizado | TCP | 111 | 0.0.0.0/0 | RPC
-    UDP personalizado | UDP | 111 | 0.0.0.0/0 | RPC
-    TCP personalizado | TCP | 2049 | 0.0.0.0/0 | NFS
-    UDP personalizado | UDP | 2049 | 0.0.0.0/0 | NFS
+    TCP personalizado | TCP | 80 | 0.0.0.0/0  
+    TCP personalizado | TCP | 443 | 0.0.0.0/0  
+    TCP personalizado | TCP | 111 | 0.0.0.0/0  
+    UDP personalizado | UDP | 111 | 0.0.0.0/0 
+    TCP personalizado | TCP | 2049 | 0.0.0.0/0 
+    UDP personalizado | UDP | 2049 | 0.0.0.0/0  
+
+### Configurando NFS
+Primeiramente vamos acessar a instância. Para isso, usando o windows, você deve instalar o Putty (https://www.putty.org/) para poder acessar remotamente via SSH.
+Assim que estiver instalado, incialize o aplicativo e digite o Ipv4 público da instância na caixa "Host Name (or IP address)", na "Port" coloque "22" e em "connection type" selecione "SSH". Após isso, no menu lateral esquerdo, clique no "+" ao lado de "Connection" > "Auth" > "Credentials". E em "Private key file for authentication" clique em "Browse..." e selecione o arquivo .ppk baixado (o par de chave). Feito isso, clique em "Open" que abrirá o terminal da sua máquina virtual.
+Aparecerá o terminal lhe solicitando o login, digite o nome de usuário padrão "ec2-user" e aperte enter. Agora você está conectado.
+
+ - Instalar o pacote necessário para o servidor NFS ```sudo yum install nfs-utils```
+ - Crie o diretório em que será montado o sistema de arquivos ```sudo mkdir mnt/nfs```
+ - 
+
