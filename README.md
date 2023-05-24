@@ -107,23 +107,21 @@ OFFLINE;
     TCP personalizado | TCP | 2049 | 0.0.0.0/0 
     UDP personalizado | UDP | 2049 | 0.0.0.0/0  
 
+### Configurando EFS/NFS no console AWS
+ - Acesse os serviços e pesquise por EFS, clique no mesmo.
+ - Clique em "Criar sistema de arquivos".
+ - Dê um nome ao seu EFS e escolha a VPC configurada anteriormente.
+ - Selecione o EFS criado e clique em "Visualizar detalhes".
+ - Agora, no canto superior direito, clique em "Anexar".
+ - Na opção "Usando o cliente NFS:", copie o código.
+
 ### Configurando NFS
  - Conecte-se ao seu servidor Amazon Linux 2 usando SSH ou qualquer outra ferramenta de acesso remoto.
  - Atualize os pacotes da sua maquina ```sudo yum -y update```
- - Instale o pacote necessário para o servidor NFS ```sudo yum install nfs-utils```
- - Crie o diretório para o NFS ```sudo mkdir mnt/nfs```
- - Edite o arquivo '/etc/exports' usando um editor de texto, como o nano ou o vi:
- ```sudo vi /etc/exports```
- - Para compartilhar o diretório '/mnt/nfs' com permissões de leitura e gravação para o endereço IP fornecido, adicione a seguinte linha em '/etc/exports'(substitua <IP_DO_SERVIDOR_NFS> pelo IP fornecido):
- ```sudo mount <IP_DO_SERVIDOR_NFS>:/<CAMINHO_DO_COMPARTILHAMENTO> /mnt/nfs```
- - Salve e feche o arquivo.
- - Exporte as configurações do NFS e reinicie o serviço NFS para aplicar as alterações:
- ```sudo exportfs -a```
- ```sudo systemctl restart nfs-server```
- - Verifique se o compartilhamento está funcionando corretamente(Isso deve exibir a lista de compartilhamentos NFS disponíveis no seu servidor) 
- ```showmount -e localhost```
+ - Crie o diretório para o NFS ```sudo mkdir /nfs```
+ - Para montar o NFS no diretório, execute o comando copiado do tópico anterior e substitua a última palavra('efs') pelo caminho do diretório que você quer o NFS, neste caso ```/nfs```. Pronto, NFS funcionando.
  - Agora para criar um diretório com seu nome(no meu caso "Pedro"), acesse o diretório e crie-o
- ```cd /mnt/nfs```
+ ```cd /nfs```
  ```sudo mkdir pedro```
 
 ### Configurando o Apache
@@ -135,7 +133,7 @@ OFFLINE;
  - Verifique se o serviço do Apache está em execução (Se tudo estiver correto, você verá uma mensagem indicando que o serviço está ativo (running)) ```sudo systemctl status httpd``` e então o Apache estará online e em execução, podendo acessá-lo digitando o  IP público do seu servidor na barra de pesquisa do seu navegador. 
 
 ### Script para validação do status do Apache
- - No terminal da instância, vá para o seu diretório: ```cd /mnt/nfs/pedro```
+ - No terminal da instância, vá para o seu diretório: ```cd /nfs/pedro```
  - Crie um novo arquivo .sh para implementar o código de validação. Para isso, siga as etapas seguintes.
  - Crie o arquivo ```sudo vi validador_apache.sh```
  - Insira nele o código:
@@ -143,7 +141,7 @@ OFFLINE;
 #!/bin/bash
 
    # Diretório de saída
-   dir_de_saida="/mnt/nfs/pedro"
+   dir_de_saida="/nfs/pedro"
 
 # Função para verificar o status do Apache e registrar o resultado
 validador_apache() {
@@ -166,7 +164,7 @@ validador_apache
 ### Automatizando a execução do código validador
 Para automatizar o processo e o código ser executado a cada 5 minutos devemos utilizar o crontab(agendador de tarefas de sistemas operacionais Linux).
  - Ainda no terminal da instância, edite o crontab ```sudo crontab -e```
- - Agora, adicione no arquivo: ```*/5 * * * * /mnt/nfs/pedro/validador_apache.sh```
+ - Agora, adicione no arquivo: ```*/5 * * * * /nfs/pedro/validador_apache.sh```
 
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Diretório de saída
-dir_de_saida="/mnt/nfs/pedro"
+dir_de_saida="/nfs/pedro"
 
 # Função para verificar o status do Apache e registrar o resultado
 validador_apache() {
