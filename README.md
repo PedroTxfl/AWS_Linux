@@ -124,6 +124,50 @@ OFFLINE;
  ```showmount -e localhost```
  - Agora para criar um diretório com seu nome(no meu caso "Pedro"), acesse o diretório e crie-o
  ```cd /mnt/nfs```
- ```sudo mkdir Pedro```
+ ```sudo mkdir pedro```
+
+### Configurando o Apache
+ - Ainda no seu terminal da sua instância, Instale o Apache
+  ```sudo yum install httpd```
+ - Após a instalação, inicie o serviço do Apache 
+ ```sudo systemctl start httpd```
+ - Agora use o comando para habilitá-lo ```sudo systemctl enable httpd```
+ - Verifique se o serviço do Apache está em execução (Se tudo estiver correto, você verá uma mensagem indicando que o serviço está ativo (running)) e então o Apache estará online e em execução, podendo acessá-lo digitando o  IP público do seu servidor na barra de pesquisa do seu navegador. 
+
+### Script para validação do status do Apache
+ - No terminal da instância, vá para o seu diretório: ```cd /mnt/nfs/pedro```
+ - Crie um novo arquivo .sh para implementar o código de validação. Para isso, siga as etapas seguintes.
+ - Crie o arquivo ```vi validador_apache.sh```
+ - Insira nele o código:
+```
+#!/bin/bash
+
+   # Diretório de saída
+   dir_de_saida="/mnt/nfs/pedro"
+
+# Função para verificar o status do Apache e registrar o resultado
+validador_apache() {
+    apache_status=$(systemctl is-active httpd)
+
+    if [[ $apache_status == "active" ]]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') Apache Online - O Apache está em execução." >> "$dir_de_saida/apache_online.txt"
+    else
+        echo "$(date '+%Y-%m-%d %H:%M:%S') Apache Offline - O Apache não está em execução." >> "$dir_de_saida/apache_offline.txt"
+    fi
+}
+
+# Executa a função 
+validador_apache
+``` 
+
+ - Salve o arquivo.
+ - Agora dê permissão de execução ao arquivo ```chmod +x validador_apache.sh```
+
+### Automatizando a execução do código validador
+Para automatizar o processo e o código ser executado a cada 5 minutos devemos utilizar o crontab(agendador de tarefas de sistemas operacionais Linux).
+ - Ainda no terminal da instância, edite o crontab ```crontab -e```
+ - Agora, adicione no arquivo: ```*/5 * * * * /mnt/nfs/pedro/validador_apache.sh```
 
 
+
+ 
