@@ -108,11 +108,22 @@ OFFLINE;
     UDP personalizado | UDP | 2049 | 0.0.0.0/0  
 
 ### Configurando NFS
-Primeiramente vamos acessar a instância. Para isso, usando o windows, você deve instalar o Putty (https://www.putty.org/) para poder acessar remotamente via SSH.
-Assim que estiver instalado, incialize o aplicativo e digite o Ipv4 público da instância na caixa "Host Name (or IP address)", na "Port" coloque "22" e em "connection type" selecione "SSH". Após isso, no menu lateral esquerdo, clique no "+" ao lado de "Connection" > "Auth" > "Credentials". E em "Private key file for authentication" clique em "Browse..." e selecione o arquivo .ppk baixado (o par de chave). Feito isso, clique em "Open" que abrirá o terminal da sua máquina virtual.
-Aparecerá o terminal lhe solicitando o login, digite o nome de usuário padrão "ec2-user" e aperte enter. Agora você está conectado.
+ - Conecte-se ao seu servidor Amazon Linux 2 usando SSH ou qualquer outra ferramenta de acesso remoto.
+ - Atualize os pacotes da sua maquina ```sudo yum -y update```
+ - Instale o pacote necessário para o servidor NFS ```sudo yum install nfs-utils```
+ - Crie o diretório para o NFS ```sudo mkdir mnt/nfs```
+ - Edite o arquivo '/etc/exports' usando um editor de texto, como o nano ou o vi:
+ ```sudo vi /etc/exports```
+ - Para compartilhar o diretório '/mnt/nfs' com permissões de leitura e gravação para o endereço IP fornecido, adicione a seguinte linha em '/etc/exports'(substitua <IP_DO_SERVIDOR_NFS> pelo IP fornecido):
+ ```/mnt/nfs <IP_DO_SERVIDOR_NFS>(rw,sync)```
+ - Salve e feche o arquivo.
+ - Exporte as configurações do NFS e reinicie o serviço NFS para aplicar as alterações:
+ ```sudo exportfs -a```
+ ```sudo systemctl restart nfs-server```
+ - Verifique se o compartilhamento está funcionando corretamente(Isso deve exibir a lista de compartilhamentos NFS disponíveis no seu servidor) 
+ ```showmount -e localhost```
+ - Agora para criar um diretório com seu nome(no meu caso "Pedro"), acesse o diretório e crie-o
+ ```cd /mnt/nfs```
+ ```sudo mkdir Pedro```
 
- - Instalar o pacote necessário para o servidor NFS ```sudo yum install nfs-utils```
- - Crie o diretório em que será montado o sistema de arquivos ```sudo mkdir mnt/nfs```
- - 
 
