@@ -137,7 +137,7 @@ OFFLINE;
 ### Script para validação do status do Apache
  - No terminal da instância, vá para o seu diretório: ```cd /mnt/nfs/pedro```
  - Crie um novo arquivo .sh para implementar o código de validação. Para isso, siga as etapas seguintes.
- - Crie o arquivo ```vi validador_apache.sh```
+ - Crie o arquivo ```sudo vi validador_apache.sh```
  - Insira nele o código:
 ```
 #!/bin/bash
@@ -161,11 +161,11 @@ validador_apache
 ``` 
 
  - Salve o arquivo.
- - Agora dê permissão de execução ao arquivo ```chmod +x validador_apache.sh```
+ - Agora dê permissão de execução ao arquivo ```sudo chmod +x validador_apache.sh```
 
 ### Automatizando a execução do código validador
 Para automatizar o processo e o código ser executado a cada 5 minutos devemos utilizar o crontab(agendador de tarefas de sistemas operacionais Linux).
- - Ainda no terminal da instância, edite o crontab ```crontab -e```
+ - Ainda no terminal da instância, edite o crontab ```sudo crontab -e```
  - Agora, adicione no arquivo: ```*/5 * * * * /mnt/nfs/pedro/validador_apache.sh```
 
 
