@@ -115,7 +115,7 @@ OFFLINE;
  - Edite o arquivo '/etc/exports' usando um editor de texto, como o nano ou o vi:
  ```sudo vi /etc/exports```
  - Para compartilhar o diretório '/mnt/nfs' com permissões de leitura e gravação para o endereço IP fornecido, adicione a seguinte linha em '/etc/exports'(substitua <IP_DO_SERVIDOR_NFS> pelo IP fornecido):
- ```/mnt/nfs <IP_DO_SERVIDOR_NFS>(rw,sync)```
+ ```sudo mount <IP_DO_SERVIDOR_NFS>:/<CAMINHO_DO_COMPARTILHAMENTO> /mnt/nfs```
  - Salve e feche o arquivo.
  - Exporte as configurações do NFS e reinicie o serviço NFS para aplicar as alterações:
  ```sudo exportfs -a```
@@ -132,7 +132,7 @@ OFFLINE;
  - Após a instalação, inicie o serviço do Apache 
  ```sudo systemctl start httpd```
  - Agora use o comando para habilitá-lo ```sudo systemctl enable httpd```
- - Verifique se o serviço do Apache está em execução (Se tudo estiver correto, você verá uma mensagem indicando que o serviço está ativo (running)) e então o Apache estará online e em execução, podendo acessá-lo digitando o  IP público do seu servidor na barra de pesquisa do seu navegador. 
+ - Verifique se o serviço do Apache está em execução (Se tudo estiver correto, você verá uma mensagem indicando que o serviço está ativo (running)) ```sudo systemctl status httpd``` e então o Apache estará online e em execução, podendo acessá-lo digitando o  IP público do seu servidor na barra de pesquisa do seu navegador. 
 
 ### Script para validação do status do Apache
  - No terminal da instância, vá para o seu diretório: ```cd /mnt/nfs/pedro```
