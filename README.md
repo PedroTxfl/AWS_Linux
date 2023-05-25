@@ -161,10 +161,23 @@ validador_apache
  - Salve o arquivo.
  - Agora dê permissão de execução ao arquivo ```sudo chmod +x validador_apache.sh```
 
+### Configurando NFS para persistir mesmo após uma reinicialização da EC2
+Por padrão, após uma reinicialização da instância, o sistema de arquivos que estava montado na mesma não é remontado automáticamente, mas para que isso mude, devemos seguir os próximos passos.
+ - Abra e edite o arquivo '/etc/fstab' usando o comando ```sudo vi /etc/fstab```.
+ - No final do arquivo /etc/fstab, adicione uma nova linha com as informações do sistema de arquivos a serem montadas. A sintaxe geral é: 
+ ```<endereço_do_servidor>:<caminho_remoto>  <ponto_de_montagem_local>  <tipo_de_sistema_de_arquivos>  <opções_de_montagem>  <dump>  <pass>```
+ Neste caso usaremos:
+ ```<endereço_do_servidor_nfs>:/nfs  /nfs  nfs  defaults  0  0```
+ - Salve o arquivo.
+ 
 ### Automatizando a execução do código validador
 Para automatizar o processo e o código ser executado a cada 5 minutos devemos utilizar o crontab(agendador de tarefas de sistemas operacionais Linux).
  - Ainda no terminal da instância, edite o crontab ```sudo crontab -e```
  - Agora, adicione no arquivo: ```*/5 * * * * /nfs/pedro/validador_apache.sh```
+
+
+
+
 
 
 
